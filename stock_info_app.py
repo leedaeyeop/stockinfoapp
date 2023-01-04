@@ -95,7 +95,7 @@ if clicked:
   # DataFrame 데이터를 엑셀 데이터(excel_data)로 변환
   excel_data = BytesIO() # 메모리 버퍼에 바이너리 객체 생성
   # df['date'] = pd.to_datetime( df['date'], errors='coerce',utc=True)
-  # df.index = df.index.tz_localize(None)
+  df.index = df.index.tz_localize(None)
   df.to_excel(excel_data) # DataFrame 데이터를 엑셀 형식으로 버퍼에 쓰기
   
   columns = st.columns(2) # 2개의 세로단으로 구성
