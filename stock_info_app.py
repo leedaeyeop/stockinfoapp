@@ -4,6 +4,7 @@ import yfinance as yf
 import datetime
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 from io import BytesIO
 
 def get_stock_info(market_type=None):
@@ -48,13 +49,20 @@ def get_ticker_symbol(company_name, market_type=None):
 
 st.title('주식 정보를 가져오는 웹 앱')
 
+radio_options = ['코스피', '코스닥']
+radio_selected = st.sidebar.radio('증권시장', radio_options)
+
 stock_name = st.sidebar.text_input('회사 이름', value="NAVER")
 date_range = st.sidebar.date_input("시작일과 종료일", [datetime.date(2019, 1, 1), datetime.date(2021, 12, 31)])
 
 clicked = st.sidebar.button("주가 데이터 가져오기")
 
 if clicked:
-  ticker_symbol = get_ticker_symbol(stock_name, "kospi")
+  market_type = 'kospi'
+  if radio_selected == '코스닥':
+    market_type = 'kosdaq'
+
+  ticker_symbol = get_ticker_symbol(stock_name, market_type)
   ticker_data = yf.Ticker(ticker_symbol)
 
   start_p = date_range[0] # 시작일
@@ -66,6 +74,7 @@ if clicked:
   st.subheader(f"[{stock_name}] 주가 데이터")
   st.dataframe(df.head()) # 주가 데이터 표시(앞의 일부만 표시)
 
+  fontprop = fm.FontProperties(fname='NanumGothic.ttf', size=18)
   matplotlib.rcParams['font.family'] = 'Malgun Gothic'
   matplotlib.rcParams['axes.unicode_minus'] = False
 
